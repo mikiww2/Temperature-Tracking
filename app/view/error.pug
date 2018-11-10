@@ -1,0 +1,15 @@
+extends ./layout/registerLayout
+
+block content
+    .error-page-area
+        .error-page-wrap
+            i.notika-icon.notika-close
+
+            h2 ERROR
+                span.counter #{error.status}
+
+            p La pagina che stai cercando non è stata trovata
+            if(error.message)
+                p #{error.message}
+
+            a.btn(href='/') Vai alla pagina principale

@@ -1,0 +1,138 @@
+extends ./layout/mainLayout
+
+block script
+    script(src='/assets/js/charts/Chart.js')
+    script(src='/assets/js/todo/jquery.todo.js')
+    script(src='/assets/js/data-table/jquery.dataTables.min.js')
+    script(src='/assets/js/data-table/data-table-act.js')
+
+    script(src='/assets/js/custom-mapDetail-page.js')
+
+block content
+    .container.container-fluid#mapDetail
+        .alert.d-none#mapAlert(role='alert')
+
+        .container.title-section
+            .row
+                .col
+                    h3#nameMap #{map.name}
+                        a.btn.btn-primary.notika-btn-primary.waves-effect.mg-l-5(href='#' data-toggle='modal' data-target='#updateNameMapModal')
+                            i.fa.fa-pencil.icon-button
+            .row
+                .col-xs-12
+                        a.btn.btn-success.notika-btn-success.waves-effect(href='/map/' + map.id + '/statistics') Statistiche
+                            i.fa.fa-open.icon-button
+
+        .line-chart-area
+            .container
+                .row
+                    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+                        .data-table-list
+                            button.btn.btn-success.notika-btn-success.btn-block.waves-effect(onclick='loadDetectorModal("create", null);' data-toggle='modal' data-target='#DetectorModal') Aggiungi un nuovo termometro
+                            
+                            if(!map.detectors.length)
+                                p.mg-t-15 Nessun termometro presente.
+                            else
+                                .table-responsive
+                                    table.table.table-striped.text-center#data-table-basic
+                                        thead
+                                            tr
+                                                th.text-center Nominativo termometro 
+                                                th.text-center Posizione
+                                                th.text-center Azioni
+                                        tbody#idTable
+                                            each detector in map.detectors
+                                                tr(id=detector.id)
+                                                    td #{detector.name}
+
+                                                    case detector.position
+                                                        when 'outdoor'
+                                                            td Esterna
+                                                        when 'indoor'
+                                                            td Interna
+                                                        when 'undefined'
+                                                            td Sconosciuta
+                                                        default
+                                                            td Sconosciuta
+                                                    
+                                                    td.btn-toolbar(role='toolbar')
+                                                        .btn-group.bbb(role='group')
+                                                            button.btn.btn-primary.notika-btn-primary.waves-effect(onclick='loadDetectorModal("update","' + detector.id + '");' data-toggle='modal' data-target='#DetectorModal')
+                                                                i.fa.fa-pencil.icon-button
+                                                                | Modifica
+                                                        .btn-group(role='group')
+                                                            button.btn.btn-danger.notika-btn-danger.waves-effect.bbb(onclick='loadDeleteDetectorModal("' + detector.id + '");' data-toggle='modal' data-target='#deleteDetectorModal')
+                                                                i.fa.fa-trash.icon-button
+                                                                | Elimina
+                                                        if detector.temperature.length 
+                                                            -var t=''
+                                                            each d in detector.temperature
+                                                                -t= t +'%' + d.date + '%' + d.value + '%'
+                                                            
+                                                            .btn-group(role='group')
+                                                                button.btn.btn-success.notika-btn-succes.waves-effect.bbb(onclick='loadChart("' + detector.name + '","' + t + '");')
+                                                                    i.fa.fa-area-chart.icon-button
+                                                                    | Grafico
+                
+                    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+                        .line-chart-wp.sm-res-mg-t-30.chart-display-nn
+                            canvas#linechart(height='140vh' width='180vw')
+
+        .modal.fade.in#DetectorModal(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Aggiungi un nuovo termometro
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        .nk-form
+                            .input-group
+                                span.input-group-addon.nk-ic-st-pro
+                                    i.notika-icon.notika-support
+                                .nk-int-st
+                                    input.form-control#nameDetectorModal(type='text' placeholder='Nome' name='name' maxlength='20' required='true')
+                            
+                            .input-group.mg-t-15
+                                label Posizione :
+                                .bootstrap-select.fm-cmp-mg
+                                    .btn-group.bootstrap-select
+                                        select.selectpicker#positionDetectorModal(tabindex='-98')
+                                            option(value='undefined') Sconosciuta
+                                            option(value='indoor') Interna
+                                            option(value='outdoor') Esterna
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-success.notika-btn-success.waves-effect Chiudi
+                        button(type='button', data-dismiss='modal', onclick='executeDetector("' + map.id + '");').btn.btn-success.notika-btn-success.waves-effect Conferma
+
+        .modal.fade.in#updateNameMapModal(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Modifica il nome della mappa
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body.mg-t-15
+                        .nk-form
+                            .input-group
+                                span.input-group-addon.nk-ic-st-pro
+                                    i.notika-icon.notika-support
+                                .nk-int-st
+                                    input.form-control#nameMapModal(type='text' placeholder='Nome' name='name' maxlength='20' required='true' value = map.name)
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-success.notika-btn-success.waves-effect Chiudi
+                        button(type='button', data-dismiss='modal', onclick='updateNameMap("' + map.id + '");').btn.btn-success.notika-btn-success.waves-effect Conferma
+
+        .modal.fade.in#deleteDetectorModal(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Elimina termometro
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        p Sei sicuro di volerlo fare?
+                        p L'eliminazione sarà definitiva
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-success.notika-btn-success.waves-effect Chiudi
+                        button(type='button', data-dismiss='modal', onclick='deleteDetector("' + map.id + '");').btn.btn-success.notika-btn-success.waves-effect Conferma

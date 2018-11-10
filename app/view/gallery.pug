@@ -1,0 +1,75 @@
+extends ./layout/mainLayout
+
+block script
+    script(src='/assets/js/charts/Chart.js')
+    script(src='/assets/js/todo/jquery.todo.js')
+    script(src='/assets/js/data-table/jquery.dataTables.min.js')
+    script(src='/assets/js/data-table/data-table-act.js')
+
+    script(src='/assets/js/custom-gallery-page.js')
+
+block content
+    #gallery
+        .alert.d-none#galleryAlert(role='alert')
+    
+        .container
+            .row
+                .col-lg-4.col-md-4.col-sm-6.col-xs-10
+                    a.btn.btn-success.notika-btn-success.btn-block.waves-effect(href='#' data-toggle='modal' data-target='#newMapModal') Aggiungi una nuova mappa
+                    
+            .row.mg-t-30
+                .col-10
+                    p Questo sito permette l'archiviamento e la visualizzazione in maniera semplicistica dei dati della temperatura ricevuti da termometri fittizzi.
+                    p È possibile creare e gestire delle mappe che contengono termometri.
+                    p Nel caso della creazione di termometri il servizio che si occupa di gestirli crea dei valori ogni 30 minuti e i grafici non sono disponibili finché non sono presenti dei valori da visualizzare.
+                    p I documenti sono disponibili al link 
+                        a(href='https://github.com/mikiww2/Temperature-Tracking') github.com/mikiww2/Temperature-Tracking
+                        | .
+                        
+            .row.mg-t-30
+                .col-lg-12.col-md-12.col-sm-12.col-xs-12
+                    - var i = 0
+                    - var map
+                    while i < maps.length
+                        .row.mg-t-15
+                            each v in [0, 1, 2, 3]
+                                if maps[i]
+                                    - map = maps[i]
+                                    - i++
+                                    include ./partials/map-card
+            //.row
+                .col-lg-6.col-md-6.col-sm-6.col-xs-12
+                    .line-chart-wp.sm-res-mg-t-30.chart-display-nn
+                        canvas#linechartinterpolation(height='140vh' width='180vw')
+
+        .modal.fade.in#newMapModal(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Aggiungi una nuova mappa
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body.mg-t-15
+                        .nk-form
+                            .input-group
+                                span.input-group-addon.nk-ic-st-pro
+                                    i.notika-icon.notika-edit
+                                .nk-int-st
+                                    input.form-control#nameMapModal(type='text' placeholder='Nome mappa' name='name' maxlength='20' required='true')
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-default.waves-effect Chiudi
+                        button(type='button', data-dismiss='modal', onclick='createMap();').btn.btn-default.waves-effect Conferma
+
+        .modal.fade.in#deleteMapModal(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Elimina mappa
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        p Sei sicuro di volerlo fare?
+                        p L'eliminazione sarà definitiva
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-success.notika-btn-success.waves-effect Chiudi
+                        button(type='button', data-dismiss='modal', onclick='deleteMap();').btn.btn-success.notika-btn-success.waves-effect Conferma

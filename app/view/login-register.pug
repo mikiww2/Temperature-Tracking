@@ -1,0 +1,63 @@
+extends ./layout/registerLayout
+
+block content
+    .login-content
+        // Login
+        form.nk-block#l-login(method='POST' action='/api/auth/sign_in')(class=typeof signUp === "undefined" ? "toggled" : "")
+            .nk-form
+                if(signIn)
+                    div.alert.alert-danger.alert-mg-b-0(role="alert") #{message}
+                .input-group
+                    span.input-group-addon.nk-ic-st-pro
+                        i.notika-icon.notika-support
+                    .nk-int-st
+                        input.form-control(type='text' placeholder='Email' name='email' autocomplete='username' value=emailIn required='true')
+
+                .input-group.mg-t-15
+                    span.input-group-addon.nk-ic-st-pro
+                        i.notika-icon.notika-edit
+                    .nk-int-st
+                        input.form-control(type='password' placeholder='Password' name='password' autocomplete='current-password' required='true')
+
+                button.btn.btn-default.notika-btn-default.waves-effect.btn-block.mg-t-15(type='submit') Conferma
+
+            .nk-navigation.nk-lg-ic
+                a(href='#' data-ma-action='nk-login-switch' data-ma-block='#l-register')
+                    i.notika-icon.notika-plus-symbol
+                    span Registrati
+
+        // Register
+        form.nk-block#l-register(method='POST' action='/api/auth/sign_up')(class=typeof signUp === "undefined" ? "" : "toggled")
+            .nk-form
+                if(signUp)
+                    div.alert.alert-danger.alert-mg-b-0(role="alert") #{message}
+                .input-group
+                    span.input-group-addon.nk-ic-st-pro
+                        i.notika-icon.notika-support
+                    .nk-int-st
+                        input.form-control(type='text' placeholder='Nome' name='name' value=name required='true')
+
+                .input-group.mg-t-15
+                    span.input-group-addon.nk-ic-st-pro
+                        i.notika-icon.notika-mail
+                    .nk-int-st
+                        input.form-control(type='text' placeholder='Email' name='email' autocomplete='username' value=emailUp required='true')
+
+                .input-group.mg-t-15
+                    span.input-group-addon.nk-ic-st-pro
+                        i.notika-icon.notika-edit
+                    .nk-int-st
+                        input.form-control(type='password' placeholder='Password' name='password' autocomplete='new-password' required='true')
+
+                .input-group.mg-t-15
+                    span.input-group-addon.nk-ic-st-pro
+                        i.notika-icon.notika-edit
+                    .nk-int-st
+                        input.form-control(type='password' placeholder='Ripeti la password' name='password2' autocomplete='new-password' required='true')
+
+                button.btn.btn-default.notika-btn-default.waves-effect.btn-block.mg-t-15(type='submit') Conferma
+
+            .nk-navigation.rg-ic-stl
+                a(href='#' data-ma-action='nk-login-switch' data-ma-block='#l-login')
+                    i.notika-icon.notika-right-arrow
+                    span Autenticati

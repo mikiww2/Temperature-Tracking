@@ -1,0 +1,18 @@
+.col-lg-3.col-md-3.col-sm-3.col-xs-6
+    .data-table-list.cardMapGallery.sm-res-mg-t-30.tb-res-mg-t-30.dk-res-mg-t-30
+        .row
+            .col-lg-12.col-md-12.col-sm-12.col-xs-12.text-center.mg-t-15
+                h3.nameMapCard #{map.name}
+        .row
+            .col-lg-12.col-md-12.col-sm-12.col-xs-12.sm-res-mg-t-15.tb-res-mg-t-15.dk-res-mg-t-15.mg-t-5
+                p Termometri : #{map.nDetectors}
+        .row
+            .text-center.mg-b-15
+                a.btn.btn-primary.notika-btn-primary.waves-effect(href='/map/' + map.id)
+                    i.icon-button.fa.fa-pencil
+                    | Apri
+        .row
+            .text-center
+                button(type='button', data-toggle='modal', data-target='#deleteMapModal', onclick='loadDeleteMap("' + map.id + '");').btn.btn-danger.notika-btn-danger.waves-effect
+                    i.icon-button.fa.fa-trash
+                    | Elimina

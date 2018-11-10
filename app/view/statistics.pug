@@ -1,0 +1,47 @@
+extends ./layout/mainLayout
+
+block script
+    script(src='/assets/js/data-table/jquery.dataTables.min.js')
+    script(src='/assets/js/data-table/data-table-act.js')
+
+block content
+    .data-table-area
+        .container
+            .row
+                .col-lg-12.col-md-12.col-sm-12.col-xs-12
+                    .data-table-list
+                        .basic-tb-hd
+                            h2 Tabella delle rilevazioni dei termometri
+
+                        if(!statistics.length)
+                            p Nessuna statistica trovata
+                        else
+                            .table-responsive
+                                table.table.table-striped#data-table-basic
+                                    thead
+                                        tr
+                                            th Termometro
+                                            th Positione
+                                            th Intervallo
+                                            th Temperatura
+                                    tbody
+                                        each detector in statistics
+                                            each t in detector.temperature
+                                                tr
+                                                    if !detector.name
+                                                        td Termometro
+                                                    else
+                                                        td #{detector.name}
+                                                    
+                                                    case detector.position
+                                                        when 'outdoor'
+                                                            td Esterna
+                                                        when 'indoor'
+                                                            td Interna
+                                                        when 'undefined'
+                                                            td Sconosciuta
+                                                        default
+                                                            td Sconosciuta
+                                                            
+                                                    td #{t.date}
+                                                    td #{t.value}°  C

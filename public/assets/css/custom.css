@@ -1,0 +1,76 @@
+.title-section {
+    text-align: center;
+    padding: 40px 0px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    width: 100%;
+    margin: 20px 0px;
+}
+
+.dataTables_filter,
+.dataTables_length {
+    padding: 0px 15px 0px 0px;
+}
+
+.cardMapGallery {
+    border: 2px;
+    border-color: black;
+    min-width: 140px;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    min-width: 100%;
+    margin-top: 25px;
+}
+
+.modal-footer {
+    margin: 10px 0px;
+}
+
+.icon-button {
+    padding-right: 5px;
+}
+
+.nameMapCard {
+    text-transform: uppercase;
+}
+
+#nameMap {
+    text-transform: uppercase;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+#gallery {
+    min-height: 400px;
+}
+
+
+/* .modal-dialog {
+    position: relative;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.modal-content {
+    max-width: screen 75%;
+} */
+
+.bbb {
+    margin-top: 10px;
+}
+
+.logo-area {
+    text-transform: uppercase;
+}
+
+.title-text {
+    color: black;
+    text-decoration: none;
+}

@@ -1,0 +1,145 @@
+extends layout
+
+block content
+    script(src='/assets/script/map.js')
+    .container.container-fluid
+
+        .row
+            .col.text-center
+                p#load Caricamento mappe in corso ...
+
+        .row
+            .col#map
+                p Informazioni mappa qui!
+                p Nome mappa:
+                    span#name nome
+                    button(type='button', data-toggle="modal" data-target="#modalEditName").btn.btn-primary
+                        span.glyphicon.glyphicon-pencil
+                        | modifica
+                 
+                p La mappa si aggiorna ogni:
+                    span#interval intervallo
+                    button(type='button', data-toggle="modal" data-target="#modalEditInterval").btn.btn-primary
+                        span.glyphicon.glyphicon-remove
+                        | modifica
+                p lista termometri qui
+                p#detectors
+
+        .modal.fade#modalEditName(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Modifica il nome della mappa
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            .form-group
+                                label(for='updateMapName') Nome mappa : 
+                                input#updateMapName.form-controll(type='string', placeholder='nome mappa', maxlength="20", required='true')
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-secondary Chiudi
+                        button(type='button', data-dismiss='modal', onclick='updateNameMap();').btn.btn-primary Conferma modifica
+
+        .modal.fade#modalEditInterval(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Modifica l'intervallo di aggiornamento
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            .form-group
+                                label Intervallo :
+                                input#updateMapIntervalHours.form-controll(type='number', value='1', min='0', max='24', step='1', required='true')
+                                | ore
+                                input#updateMapIntervalMinutes.form-controll(type='number', value='0', min='1', max='59', step='1', required='true')
+                                | minuti
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-secondary Chiudi
+                        button(type='button', data-dismiss='modal', onclick='updateIntervalMap();').btn.btn-primary Conferma modifica
+
+        .modal.fade#modalDelete(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Elimina mappa
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            p Vuoi veramente eliminare questa mappa?
+                            p Non sarà possibile recuperarla
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-danger Annulla
+                        button(type='button', data-dismiss='modal', onclick='').btn.btn-success#modalDeleteSuccess Elimina
+
+        .modal.fade#modalEditNameDetector(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Modifica il nome del termometro
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            .form-group
+                                label(for='updateDetectorName') Nome mappa : 
+                                input#updateDetectorName.form-controll(type='string', placeholder='nome termometro', maxlength="20", required='true')
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-secondary Chiudi
+                        button(type='button', data-dismiss='modal', onclick='updateNameDetector();').btn.btn-primary Conferma modifica
+
+        .modal.fade#modalEditPositionDetector(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Modifica la posizione del termometro
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            .form-group
+                                label(for='updateDetectorPosition') Posizione detector : 
+                                input#updateDetectorPosition.form-controll(type='string', placeholder='mettere selezione campi qui', maxlength="20", required='true')
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-secondary Chiudi
+                        button(type='button', data-dismiss='modal', onclick='updatePositionDetector();').btn.btn-primary Conferma modifica
+
+        .modal.fade#modalDeleteDetector(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Elimina detector
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            p Vuoi veramente eliminare questo termometro?
+                            p Non sarà possibile recuperarlo
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-danger Annulla
+                        button(type='button', data-dismiss='modal', onclick='').btn.btn-success#modalDeleteDetectorSuccess Elimina
+
+        .modal.fade#modalCreateDetector(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+            .modal-dialog.modal-dialog-centered.modal-lg(role='document')
+                .modal-content
+                    .modal-header
+                        h5.modal-title#modalLabel Aggiungi un nuovo termometro
+                        button(type='button', data-dismiss='modal', aria-label='Chiudi').close
+                            span(aria-hidden='true') &times
+                    .modal-body
+                        form
+                            .form-group
+                                label(for='newNameDetector') Nome termometro : 
+                                input#newNameDetecotr.form-controll(type='string', placeholder='nome termometro', maxlength="20", required='true')
+                            .form-group
+                                p qui posizione
+                    .modal-footer
+                        button(type='button', data-dismiss='modal').btn.btn-secondary Chiudi
+                        button(type='button', data-dismiss='modal', onclick='createDetector();').btn.btn-primary Aggiungi
+
+
+    script.
+        loadMap()
